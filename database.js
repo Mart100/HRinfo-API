@@ -1,0 +1,70 @@
+let admin
+let db
+let clanList = {}
+let weaponList = {}
+let playerList = {}
+
+const serviceAccount = require("./databaseCredentials.json")
+
+module.exports = {
+  initialize() {
+
+    let firebaseAdmin = require("firebase-admin")
+
+    firebaseAdmin.initializeApp({
+      credential: firebaseAdmin.credential.cert(serviceAccount),
+      databaseURL: "https://helmetroyaleinfo.firebaseio.com"
+    })
+
+    db = firebaseAdmin.firestore()
+
+    db.settings({timestampsInSnapshots: true})
+    console.log('Database Initialized')
+
+  },
+  getWeapons() {
+    return new Promise((resolve, reject) => {
+      if(Object.keys(weaponList) > 0) return new Promise((resolve, reject) => { resolve(weaponList) })
+
+      db.collection("weapons").get().then((querySnapshot) => {
+        let weapons = {}
+        querySnapshot.forEach((doc) => {
+          let data = doc.data() 
+          weapons[data.name] = data
+        })
+        weaponList = weapons
+        resolve(weapons)
+      })
+    })
+  },
+  getPlayers() {
+    return new Promise((resolve, reject) => {
+      if(Object.keys(playerList) > 0) resolve(playerList)
+
+      db.collection("players").get().then((querySnapshot) => {
+        let players = {}
+        querySnapshot.forEach((doc) => {
+          let data = doc.data() 
+          players[data.id] = data
+        })
+        playerList = players
+        resolve(players)
+      })
+    })
+  },
+  getClans() {
+    return new Promise((resolve, reject) => {
+      if(Object.keys(clanList) > 0) resolve(clanList)
+
+      db.collection("clans").get().then((querySnapshot) => {
+        let clans = {}
+        querySnapshot.forEach((doc) => {
+          let data = doc.data() 
+          clans[data.id] = data
+        })
+        clanList = clans
+        resolve(clans)
+      })
+    })
+  }
+}
