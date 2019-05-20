@@ -52,6 +52,25 @@ module.exports = {
       })
     })
   },
+  updatePlayer(id, what, to) {
+    let obj = {}
+    obj[what] = to
+    db.collection('players').doc(id).update(obj)
+    if(playerList[id] != undefined) playerList[id][what] = to
+    return 'SUCCESS'
+  },
+  newPlayer(id, username) {
+    let obj = {
+      id: id,
+      clan: "none",
+      points: 0,
+      username: username
+    }
+
+    db.collection('players').doc(id).set(obj)
+    playerList[id] = obj
+    return 'SUCCESS'
+  },
   getClans() {
     return new Promise((resolve, reject) => {
       if(Object.keys(clanList) > 0) resolve(clanList)
@@ -66,5 +85,24 @@ module.exports = {
         resolve(clans)
       })
     })
+  },
+  updateClan(id, what, to) {
+    let obj = {}
+    obj[what] = to
+    db.collection('clans').doc(id).update(obj)
+    if(clanList[id] != undefined) clanList[id][what] = to
+    return 'SUCCESS'
+  },
+  newClan(id) {
+    let obj = {
+      id: id,
+      desc: 'No description yet...',
+      tag: 'none',
+      public: false
+    }
+
+    db.collection('clans').doc(id).set(obj)
+    clanList[id] = obj
+    return 'SUCCESS'
   }
 }
