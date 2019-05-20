@@ -51,11 +51,12 @@ app.get('/players', async (req, res, next) => {
 })
 
 app.post('/updateplayer', async (req, res, next) => {
+  console.log('hm')
   if(req.query.token != token) return res.send('ACCESS DENIED: INVALID TOKEN')
-
   let id = req.query.id
   let what = req.query.what
   let to = req.query.to
+  console.log(id, what, to)
 
   database.updatePlayer(id, what, to)
   res.send('SUCCESS')
