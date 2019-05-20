@@ -55,7 +55,6 @@ module.exports = {
   updatePlayer(id, what, to) {
     let obj = {}
     obj[what] = to
-    console.log('yey: ', obj)
     db.collection('players').doc(id).update(obj)
     if(playerList[id] != undefined) playerList[id][what] = to
     return 'SUCCESS'
@@ -90,7 +89,6 @@ module.exports = {
   updateClan(id, what, to) {
     let obj = {}
     obj[what] = to
-    console.log('yay: ', obj)
     db.collection('clans').doc(id).update(obj)
     if(clanList[id] != undefined) clanList[id][what] = to
     return 'SUCCESS'
