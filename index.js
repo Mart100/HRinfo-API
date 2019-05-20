@@ -54,6 +54,7 @@ app.get('/players', async (req, res, next) => {
 })
 
 app.post('/updateplayer', async (req, res, next) => {
+  console.log(token, id, what, to)
   if(req.body.token != token) return res.send('ACCESS DENIED: INVALID TOKEN')
   let id = req.body.id
   let what = req.body.what
