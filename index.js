@@ -7,7 +7,7 @@ database.initialize()
 var app = express()
 let port = 3100
 
-app.use(cors)
+app.use(cors())
 
 app.get('/clans', async (req, res, next) => {
   let clans = await database.getClans()
