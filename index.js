@@ -23,24 +23,24 @@ app.get('/clans', async (req, res, next) => {
 })
 
 app.post('/updateclan', async (req, res, next) => {
-  if(req.query.token != token) return res.send('ACCESS DENIED: INVALID TOKEN')
-  let id = req.query.id
-  let what = req.query.what
-  let to = req.query.to
+  if(req.body.token != token) return res.send('ACCESS DENIED: INVALID TOKEN')
+  let id = req.body.id
+  let what = req.body.what
+  let to = req.body.to
   database.updateClan(id, what, to)
   res.send('SUCCESS')
 })
 
 app.post('/newclan', async (req, res, next) => {
-  if(req.query.token != token) return res.send('ACCESS DENIED: INVALID TOKEN')
-  let id = req.query.id
+  if(req.body.token != token) return res.send('ACCESS DENIED: INVALID TOKEN')
+  let id = req.body.id
   database.newClan(id)
   res.send('SUCCESS')
 })
 
 app.post('/deleteclan', async (req, res, next) => {
-  if(req.query.token != token) return res.send('ACCESS DENIED: INVALID TOKEN')
-  database.deleteClan(req.query.id)
+  if(req.body.token != token) return res.send('ACCESS DENIED: INVALID TOKEN')
+  database.deleteClan(req.body.id)
   res.send('SUCCESS')
 })
 
@@ -54,21 +54,19 @@ app.get('/players', async (req, res, next) => {
 })
 
 app.post('/updateplayer', async (req, res, next) => {
-  console.log(req.body.token)
   if(req.body.token != token) return res.send('ACCESS DENIED: INVALID TOKEN')
   let id = req.body.id
   let what = req.body.what
   let to = req.body.to
-  console.log(token, id, what, to)
   database.updatePlayer(id, what, to)
   res.send('SUCCESS')
 })
 
 app.post('/newplayer', async (req, res, next) => {
-  if(req.query.token != token) return res.send('ACCESS DENIED: INVALID TOKEN')
+  if(req.body.token != token) return res.send('ACCESS DENIED: INVALID TOKEN')
 
-  let id = req.query.id
-  let username = req.query.username
+  let id = req.body.id
+  let username = req.body.username
 
   database.newPlayer(id, username)
   res.send('SUCCESS')
