@@ -1,10 +1,13 @@
 let express = require('express')
 const database = require('./database.js')
+const cors =  require('cors')
 
 database.initialize()
 
 var app = express()
 let port = 3100
+
+app.use(cors)
 
 app.get('/clans', async (req, res, next) => {
   let clans = await database.getClans()
