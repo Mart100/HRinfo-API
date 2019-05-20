@@ -105,7 +105,7 @@ module.exports = {
     clanList[id] = obj
     return 'SUCCESS'
   },
-  removeClan(id) {
+  deleteClan(id) {
     db.collection('clans').doc(id).delete()
   },
 }

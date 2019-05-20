@@ -41,9 +41,9 @@ app.get('/newclan', async (req, res, next) => {
   res.send(databaseRes)
 })
 
-app.get('/removeclan', async (req, res, next) => {
+app.get('/deleteclan', async (req, res, next) => {
   if(req.query.token != token) return res.send('ACCESS DENIED: INVALID TOKEN')
-  let databaseRes = database.removeClan(id)
+  let databaseRes = database.deleteClan(id)
   res.send(databaseRes)
 })
 
