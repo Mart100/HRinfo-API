@@ -41,6 +41,11 @@ app.get('/newclan', async (req, res, next) => {
   res.send(databaseRes)
 })
 
+app.get('/removeclan', async (req, res, next) => {
+  if(req.query.token != token) return res.send('ACCESS DENIED: INVALID TOKEN')
+  let databaseRes = database.removeClan(id)
+  res.send(databaseRes)
+})
 
 /*====================*/
 /*=======PLAYER=======*/
