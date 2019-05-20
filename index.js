@@ -22,28 +22,25 @@ app.get('/clans', async (req, res, next) => {
 app.get('/updateclan', async (req, res, next) => {
   if(req.query.token != token) return res.send('ACCESS DENIED: INVALID TOKEN')
 
-  let clan = req.query.clan
+  let id = req.query.id
   let what = req.query.what
   let to = req.query.to
 
-  let databaseRes = database.updateClan(clan, what, to)
+  let databaseRes = database.updateClan(id, what, to)
 
   res.send(databaseRes)
 })
 
 app.get('/newclan', async (req, res, next) => {
   if(req.query.token != token) return res.send('ACCESS DENIED: INVALID TOKEN')
-
   let id = req.query.id
-
   let databaseRes = database.newClan(id)
-
   res.send(databaseRes)
 })
 
 app.get('/deleteclan', async (req, res, next) => {
   if(req.query.token != token) return res.send('ACCESS DENIED: INVALID TOKEN')
-  let databaseRes = database.deleteClan(id)
+  let databaseRes = database.deleteClan(req.query.id)
   res.send(databaseRes)
 })
 
@@ -59,11 +56,11 @@ app.get('/players', async (req, res, next) => {
 app.get('/updateplayer', async (req, res, next) => {
   if(req.query.token != token) return res.send('ACCESS DENIED: INVALID TOKEN')
 
-  let player = req.query.player
+  let id = req.query.id
   let what = req.query.what
   let to = req.query.to
 
-  let databaseRes = database.updatePlayer(player, what, to)
+  let databaseRes = database.updatePlayer(id, what, to)
   
   res.send(databaseRes)
 })
