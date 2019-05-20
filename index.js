@@ -25,17 +25,20 @@ app.post('/updateclan', async (req, res, next) => {
   let what = req.query.what
   let to = req.query.to
   database.updateClan(id, what, to)
+  res.send('SUCCESS')
 })
 
 app.post('/newclan', async (req, res, next) => {
   if(req.query.token != token) return res.send('ACCESS DENIED: INVALID TOKEN')
   let id = req.query.id
   database.newClan(id)
+  res.send('SUCCESS')
 })
 
 app.post('/deleteclan', async (req, res, next) => {
   if(req.query.token != token) return res.send('ACCESS DENIED: INVALID TOKEN')
   database.deleteClan(req.query.id)
+  res.send('SUCCESS')
 })
 
 /*====================*/
@@ -55,6 +58,7 @@ app.post('/updateplayer', async (req, res, next) => {
   let to = req.query.to
 
   database.updatePlayer(id, what, to)
+  res.send('SUCCESS')
 })
 
 app.post('/newplayer', async (req, res, next) => {
@@ -64,6 +68,7 @@ app.post('/newplayer', async (req, res, next) => {
   let username = req.query.username
 
   database.newPlayer(id, username)
+  res.send('SUCCESS')
 })
 
 
