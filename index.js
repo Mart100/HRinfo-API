@@ -1,5 +1,6 @@
 let express = require('express')
 const database = require('./database.js')
+const bodyParser = require('body-parser')
 const cors =  require('cors')
 let token = 'aB9gHcoyQkVdCAPnr7xCtl52JXY5rpPY'
 
@@ -8,6 +9,8 @@ database.initialize()
 var app = express()
 let port = 3100
 
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended: true}))
 app.use(cors())
 
 /*=====================*/
