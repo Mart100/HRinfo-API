@@ -59,6 +59,22 @@ app.post('/updateplayer', async (req, res, next) => {
   let what = req.body.what
   let to = req.body.to
   database.updatePlayer(id, what, to)
+
+  // if points, Check devision
+  if(what == "points") {
+    let playerDivision
+    let player = await database.getPlayer(id)
+    let currentPoints = player.points
+    let divisions = await database.getDivisions()
+
+    // get division
+    for(let divisionName in divisions) {
+      let division = divisions[divisionName]
+      if(currentPoints > division.from && currentPoints < division.to) playerDivision = division
+    }
+
+    database.updatePlayer(id, "division", playerDivision.name)
+  }
   res.send('SUCCESS')
 })
 
