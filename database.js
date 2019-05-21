@@ -79,6 +79,7 @@ module.exports = {
     let obj = {
       id: id,
       clan: "none",
+      division: 'jungle',
       points: 0,
       username: username
     }
