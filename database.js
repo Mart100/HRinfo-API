@@ -3,6 +3,7 @@ let db
 let clanList = {}
 let weaponList = {}
 let playerList = {}
+let divisionList = {}
 
 const serviceAccount = require("./databaseCredentials.json")
 
@@ -22,6 +23,21 @@ module.exports = {
     console.log('Database Initialized')
 
   },
+  getDivisions() {
+    return new Promise((resolve, reject) => {
+      if(Object.keys(divisionList) > 0) return new Promise((resolve, reject) => { resolve(divisionList) })
+
+      db.collection("divisions").get().then((querySnapshot) => {
+        let divisions = {}
+        querySnapshot.forEach((doc) => {
+          let data = doc.data() 
+          divisions[data.name] = data
+        })
+        divisionList = divisions
+        resolve(divisions)
+      })
+    })
+  }
   getWeapons() {
     return new Promise((resolve, reject) => {
       if(Object.keys(weaponList) > 0) return new Promise((resolve, reject) => { resolve(weaponList) })

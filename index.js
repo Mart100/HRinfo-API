@@ -74,12 +74,17 @@ app.post('/newplayer', async (req, res, next) => {
 
 
 /*=====================*/
-/*=======WEAPONS=======*/
+/*========OTHER========*/
 /*=====================*/
 
 app.get('/weapons', async (req, res, next) => {
   let weapons = await database.getWeapons()
   res.send(weapons)
+})
+
+app.get('/divisions', async (req, res, next) => {
+  let divisions = await database.getDivisions()
+  res.send(divisions)
 })
 
 app.listen(process.env.PORT || port, () => {
