@@ -37,7 +37,7 @@ module.exports = {
         resolve(divisions)
       })
     })
-  }
+  },
   getWeapons() {
     return new Promise((resolve, reject) => {
       if(Object.keys(weaponList) > 0) return new Promise((resolve, reject) => { resolve(weaponList) })
