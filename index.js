@@ -74,6 +74,8 @@ app.post('/updateplayer', async (req, res, next) => {
       if(currentPoints > division.from && currentPoints < division.to) playerDivision = division
     }
 
+    if(player.division == playerDivision.name) return
+
     database.updatePlayer(id, "division", playerDivision.name)
   }
   res.send('SUCCESS')
