@@ -63,7 +63,8 @@ app.post('/updateplayer', async (req, res, next) => {
   // if points, Check devision
   if(what == "points") {
     let playerDivision
-    let player = await database.getPlayers()[id]
+    let players = await database.getPlayers()
+    let player = players[id]
     let currentPoints = player.points
     let divisions = await database.getDivisions()
 
