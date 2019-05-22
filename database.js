@@ -25,7 +25,7 @@ module.exports = {
   },
   getDivisions() {
     return new Promise((resolve, reject) => {
-      if(Object.keys(divisionList) > 0) return resolve(divisionList)
+      if(Object.keys(divisionList).length > 0) return resolve(divisionList)
 
       db.collection("divisions").get().then((querySnapshot) => {
         let divisions = {}
@@ -40,7 +40,7 @@ module.exports = {
   },
   getWeapons() {
     return new Promise((resolve, reject) => {
-      if(Object.keys(weaponList) > 0) return resolve(weaponList)
+      if(Object.keys(weaponList).length > 0) return resolve(weaponList)
 
       db.collection("weapons").get().then((querySnapshot) => {
         let weapons = {}
@@ -55,7 +55,7 @@ module.exports = {
   },
   getPlayers() {
     return new Promise((resolve, reject) => {
-      if(Object.keys(playerList) > 0) return resolve(playerList)
+      if(Object.keys(playerList).length > 0) return resolve(playerList)
 
       db.collection("players").get().then((querySnapshot) => {
         let players = {}
@@ -90,7 +90,7 @@ module.exports = {
   },
   getClans() {
     return new Promise((resolve, reject) => {
-      if(Object.keys(clanList) > 0) return resolve(clanList)
+      if(Object.keys(clanList).length > 0) return resolve(clanList)
 
       db.collection("clans").get().then((querySnapshot) => {
         let clans = {}
