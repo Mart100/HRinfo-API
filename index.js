@@ -102,6 +102,8 @@ app.post('/updateplayer', async (req, res, next) => {
   // if change clan
   if(what == 'clan') {
     let clans = await database.getClans()
+    let players = await database.getPlayers()
+    let player = players[id]
     let playerClan = Object.values(clans).find((c) => c.name == player.clan)
     let clanMembers = playerClan.members
 
