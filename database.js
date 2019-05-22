@@ -33,6 +33,7 @@ module.exports = {
           let data = doc.data() 
           divisions[data.name] = data
         })
+        console.log('DATABASE GET DIVISIONS')
         divisionList = divisions
         resolve(divisions)
       })
@@ -48,6 +49,7 @@ module.exports = {
           let data = doc.data() 
           weapons[data.name] = data
         })
+        console.log('DATABASE GET WEAPONS')
         weaponList = weapons
         resolve(weapons)
       })
@@ -63,6 +65,7 @@ module.exports = {
           let data = doc.data() 
           players[data.id] = data
         })
+        console.log('DATABASE GET PLAYERS')
         playerList = players
         resolve(players)
       })
@@ -98,6 +101,7 @@ module.exports = {
           let data = doc.data() 
           clans[data.id] = data
         })
+        console.log('DATABASE GET CLANS')
         clanList = clans
         resolve(clans)
       })
