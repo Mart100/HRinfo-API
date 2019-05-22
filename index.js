@@ -85,6 +85,7 @@ app.post('/updateplayer', async (req, res, next) => {
 
     let clans = await database.getClans()
     let playerClan = Object.values(clans).find((c) => c.name == player.clan)
+    console.log(playerClan)
     database.updateClan(playerClan.id, 'points', to)
   }
 
