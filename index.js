@@ -88,7 +88,7 @@ app.post('/updateplayer', async (req, res, next) => {
       let totalPoints = 0
 
       for(let i in players) {
-        let player = players[player]
+        let player = players[i]
         if(player.clan != playerClan.name) continue
         totalPoints += player.points
       }
