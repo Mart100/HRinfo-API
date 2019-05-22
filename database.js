@@ -119,6 +119,9 @@ module.exports = {
       id: id,
       desc: 'No description yet...',
       tag: 'none',
+      points: 0,
+      discordMemberCount: 0,
+      members: [],
       public: false
     }
 

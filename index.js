@@ -60,6 +60,8 @@ app.post('/updateplayer', async (req, res, next) => {
   let to = req.body.to
   database.updatePlayer(id, what, to)
 
+
+  // if change points
   if(what == "points") {
 
     let players = await database.getPlayers()
@@ -95,6 +97,25 @@ app.post('/updateplayer', async (req, res, next) => {
 
       database.updateClan(playerClan.id, 'points', totalPoints)
     }
+  }
+
+  // if change clan
+  if(what == 'clan') {
+    let clans = await database.getClans()
+    let playerClan = Object.values(clans).find((c) => c.name == player.clan)
+    let clanMembers = playerClan.members
+
+    // leave clan
+    if(to == 'none') {
+      let index = clanMembers.indexOf(id)
+      if(index !== -1) clanMembers.splice(index, 1)
+    }
+
+    // join clan
+    else clanMembers.push(id)
+
+    // update
+    database.updateClan(playerClan.id, 'members', clanMembers)
   }
 
   res.send('SUCCESS')
