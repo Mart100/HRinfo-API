@@ -71,7 +71,7 @@ app.post('/updateplayer', async (req, res, next) => {
   // token access handling
   if(req.body.token != token) {
     let playerToken = await database.getPlayerToken(id)
-    if(playerToken == token) {
+    if(playerToken == req.body.token) {
       if(what == 'points') return res.send('ACCESS DENIED: CANT CHANGE POINTS WITH USER TOKEN')
       if(what == 'id') return res.send('ACCESS DENIED: CANT CHANGE ID WITH USER TOKEN')
       if(what == 'token') return res.send('ACCESS DENIED: CANT CHANGE TOKEN WITH USER TOKEN')
@@ -127,6 +127,7 @@ app.post('/updateplayer', async (req, res, next) => {
     let players = await database.getPlayers()
     let player = players[id]
     let playerClan = Object.values(clans).find((c) => c.name == player.clan)
+    if(playerClan != undefined) return
     let clanMembers = playerClan.members
 
     // leave clan
