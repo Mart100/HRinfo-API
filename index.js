@@ -50,7 +50,17 @@ app.post('/deleteclan', async (req, res, next) => {
 
 app.get('/players', async (req, res, next) => {
   let players = await database.getPlayers()
+
+  // filter out token
+  players.forEach((p) => { delete p.token})
   res.send(players)
+})
+
+app.post('/playertoken', async (req, res, next) => {
+  if(req.body.token != token) return res.send('ACCESS DENIED: INVALID TOKEN')
+  let id = req.body.id
+  let token = await database.getPlayerToken(id)
+  res.send(token)
 })
 
 app.post('/updateplayer', async (req, res, next) => {

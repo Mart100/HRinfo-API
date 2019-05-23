@@ -72,6 +72,13 @@ module.exports = {
       })
     })
   },
+  getPlayerToken(id) {
+    return new Promise(async (resolve, reject) => {
+      let players = await this.getPlayers()
+      let player = players[id]
+      resolve(player.token)
+    })
+  },
   updatePlayer(id, what, to) {
     let obj = {}
     obj[what] = to
