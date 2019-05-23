@@ -61,7 +61,6 @@ app.post('/playertoken', async (req, res, next) => {
   let id = req.body.id
   let playertoken = await database.getPlayerToken(id)
   let obj = {token: playertoken}
-  console.log(obj)
   res.send(obj)
 })
 
@@ -129,20 +128,21 @@ app.post('/updateplayer', async (req, res, next) => {
     let players = await database.getPlayers()
     let player = players[id]
     let playerClan = Object.values(clans).find((c) => c.name == player.clan)
-    if(playerClan != undefined) return
-    let clanMembers = playerClan.members
+    if(playerClan != undefined) {
+      let clanMembers = playerClan.members
 
-    // leave clan
-    if(to == 'none') {
-      let index = clanMembers.indexOf(id)
-      if(index !== -1) clanMembers.splice(index, 1)
+      // leave clan
+      if(to == 'none') {
+        let index = clanMembers.indexOf(id)
+        if(index !== -1) clanMembers.splice(index, 1)
+      }
+
+      // join clan
+      else clanMembers.push(id)
+
+      // update
+      database.updateClan(playerClan.id, 'members', clanMembers)
     }
-
-    // join clan
-    else clanMembers.push(id)
-
-    // update
-    database.updateClan(playerClan.id, 'members', clanMembers)
   }
 
   res.send('SUCCESS')
