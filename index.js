@@ -68,6 +68,7 @@ app.post('/updateplayer', async (req, res, next) => {
   let what = req.body.what
   let to = req.body.to
 
+  // token access handling
   if(req.body.token != token) {
     let playerToken = await database.getPlayerToken(id)
     if(playerToken == token) {
