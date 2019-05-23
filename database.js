@@ -5,6 +5,7 @@ let weaponList = {}
 let playerList = {}
 let divisionList = {}
 
+const utils = require('./utils.js')
 const serviceAccount = require("./databaseCredentials.json")
 
 module.exports = {
@@ -84,6 +85,7 @@ module.exports = {
       clan: "none",
       division: 'jungle',
       points: 0,
+      token: utils.randomToken(),
       username: username
     }
 
