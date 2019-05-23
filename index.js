@@ -64,10 +64,21 @@ app.post('/playertoken', async (req, res, next) => {
 })
 
 app.post('/updateplayer', async (req, res, next) => {
-  if(req.body.token != token) return res.send('ACCESS DENIED: INVALID TOKEN')
   let id = req.body.id
   let what = req.body.what
   let to = req.body.to
+
+  if(req.body.token != token) {
+    let playerToken = await database.getPlayerToken(id)
+    if(playerToken == token) {
+      if(what == 'points') return res.send('ACCESS DENIED: CANT CHANGE POINTS WITH USER TOKEN')
+      if(what == 'id') return res.send('ACCESS DENIED: CANT CHANGE ID WITH USER TOKEN')
+      if(what == 'token') return res.send('ACCESS DENIED: CANT CHANGE TOKEN WITH USER TOKEN')
+      if(what == 'division') return res.send('ACCESS DENIED: CANT CHANGE DIVISION WITH USER TOKEN')
+    }
+    else return res.send('ACCESS DENIED: INVALID TOKEN')
+
+  }
   database.updatePlayer(id, what, to)
 
 
