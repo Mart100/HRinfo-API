@@ -72,7 +72,6 @@ app.post('/updateplayer', async (req, res, next) => {
   // token access handling
   if(req.body.token != token) {
     let playerToken = await database.getPlayerToken(id)
-    console.log(playerToken, req.body.token)
     if(playerToken == req.body.token) {
       if(what == 'points') return res.send('ACCESS DENIED: CANT CHANGE POINTS WITH USER TOKEN')
       if(what == 'id') return res.send('ACCESS DENIED: CANT CHANGE ID WITH USER TOKEN')
