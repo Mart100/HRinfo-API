@@ -2,7 +2,7 @@ let express = require('express')
 const database = require('./database.js')
 const bodyParser = require('body-parser')
 const cors =  require('cors')
-let token = 'aB9gHcoyQkVdCAPnr7xCtl52JXY5rpPY'
+let APItoken = 'aB9gHcoyQkVdCAPnr7xCtl52JXY5rpPY'
 
 database.initialize()
 
@@ -23,7 +23,7 @@ app.get('/clans', async (req, res, next) => {
 })
 
 app.post('/updateclan', async (req, res, next) => {
-  if(req.body.token != token) return res.send('ACCESS DENIED: INVALID TOKEN')
+  if(req.body.token != APItoken) return res.send('ACCESS DENIED: INVALID TOKEN')
   let id = req.body.id
   let what = req.body.what
   let to = req.body.to
@@ -32,14 +32,14 @@ app.post('/updateclan', async (req, res, next) => {
 })
 
 app.post('/newclan', async (req, res, next) => {
-  if(req.body.token != token) return res.send('ACCESS DENIED: INVALID TOKEN')
+  if(req.body.token != APItoken) return res.send('ACCESS DENIED: INVALID TOKEN')
   let id = req.body.id
   database.newClan(id)
   res.send('SUCCESS')
 })
 
 app.post('/deleteclan', async (req, res, next) => {
-  if(req.body.token != token) return res.send('ACCESS DENIED: INVALID TOKEN')
+  if(req.body.token != APItoken) return res.send('ACCESS DENIED: INVALID TOKEN')
   database.deleteClan(req.body.id)
   res.send('SUCCESS')
 })
@@ -57,7 +57,7 @@ app.get('/players', async (req, res, next) => {
 })
 
 app.post('/playertoken', async (req, res, next) => {
-  if(req.body.token != token) return res.send('ACCESS DENIED: INVALID TOKEN')
+  if(req.body.token != APItoken) return res.send('ACCESS DENIED: INVALID TOKEN')
   let id = req.body.id
   let playertoken = await database.getPlayerToken(id)
   let obj = {token: playertoken}
@@ -67,13 +67,14 @@ app.post('/playertoken', async (req, res, next) => {
 app.post('/updateplayer', async (req, res, next) => {
   let id = req.body.id
   let what = req.body.what
+  let token = req.body.token
   let to = req.body.to
 
   // token access handling
-  if(req.body.token != token) {
+  if(token != APItoken) {
     let playerToken = await database.getPlayerToken(id)
-    console.log(playerToken, req.body.token, id)
-    if(playerToken == req.body.token) {
+    console.log(playerToken, token, id)
+    if(playerToken == token) {
       if(what == 'points') return res.send('ACCESS DENIED: CANT CHANGE POINTS WITH USER TOKEN')
       if(what == 'id') return res.send('ACCESS DENIED: CANT CHANGE ID WITH USER TOKEN')
       if(what == 'token') return res.send('ACCESS DENIED: CANT CHANGE TOKEN WITH USER TOKEN')
@@ -150,7 +151,7 @@ app.post('/updateplayer', async (req, res, next) => {
 })
 
 app.post('/newplayer', async (req, res, next) => {
-  if(req.body.token != token) return res.send('ACCESS DENIED: INVALID TOKEN')
+  if(req.body.token != APItoken) return res.send('ACCESS DENIED: INVALID TOKEN')
 
   let id = req.body.id
   let username = req.body.username
