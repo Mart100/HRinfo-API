@@ -52,7 +52,7 @@ app.get('/players', async (req, res, next) => {
   let players = await database.getPlayers()
 
   // filter out token
-  players.forEach((p) => { delete p.token})
+  for(let id in players) delete players[id].token
   res.send(players)
 })
 
