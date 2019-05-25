@@ -110,13 +110,12 @@ app.post('/updateplayer', async (req, res, next) => {
     // UPDATE CLAN TOTAL POINTS
 
     let clans = await database.getClans()
-    let playerClan = Object.values(clans).find((c) => c.name == player.clan)
+    let playerClan = clans[player.clan]
     if(playerClan != undefined) {
       let totalPoints = 0
 
       for(let i in players) {
         let player = players[i]
-        if(player.clan != playerClan.name) continue
         totalPoints += player.points
       }
 
@@ -129,7 +128,7 @@ app.post('/updateplayer', async (req, res, next) => {
     let clans = await database.getClans()
     let players = await database.getPlayers()
     let player = players[id]
-    let playerClan = Object.values(clans).find((c) => c.name == player.clan)
+    let playerClan = clans[player.clan]
     if(playerClan != undefined) {
       let clanMembers = playerClan.members
 
