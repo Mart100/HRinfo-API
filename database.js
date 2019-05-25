@@ -130,6 +130,7 @@ module.exports = {
       tag: 'none',
       points: 0,
       discordMemberCount: 0,
+      verified: false,
       members: [],
       public: false
     }
