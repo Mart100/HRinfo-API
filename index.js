@@ -1,5 +1,6 @@
 let express = require('express')
 const database = require('./database.js')
+const database = require('./HRapi.js')
 const bodyParser = require('body-parser')
 const cors =  require('cors')
 let APItoken = 'aB9gHcoyQkVdCAPnr7xCtl52JXY5rpPY'
@@ -51,6 +52,8 @@ app.post('/deleteclan', async (req, res, next) => {
 app.get('/players', async (req, res, next) => {
   let players = await database.getPlayers()
 
+  updateGameStats()
+
   // filter out token
   for(let id in players) delete players[id].token
   res.send(players)
@@ -83,8 +86,8 @@ app.post('/updateplayer', async (req, res, next) => {
     else return res.send('ACCESS DENIED: INVALID TOKEN')
 
   }
-  database.updatePlayer(id, what, to)
 
+  database.updatePlayer(id, what, to)
 
   // if change points
   if(what == "points") {
@@ -114,8 +117,8 @@ app.post('/updateplayer', async (req, res, next) => {
     if(playerClan != undefined) {
       let totalPoints = 0
 
-      for(let i in players) {
-        let player = players[i]
+      for(let i in playerClan.members) {
+        let player = playerClan.members[i]
         totalPoints += player.points
       }
 
@@ -177,3 +180,33 @@ app.get('/divisions', async (req, res, next) => {
 app.listen(process.env.PORT || port, () => {
   console.log('Server listening on port ', process.env.PORT || port)
 })
+
+async function updateGameStats(players) {
+  return
+  let timers = await database.getTimers()
+  let gameStatTimer = timers.gameStatUpdate.toDate()
+  let now = new Date()
+
+  if(now.getTime()-gameStatTimer > 1000*60*60*24) {
+    database.updateTimers('gameStatUpdate', now)
+
+    let players = await database.getPlayers()
+
+    for(let playerID in players) {
+      let player = players[playerID]
+      if(player.gameID == 'none' || player.gameID == undefined) continue
+      let gameStats = player.gameStats
+      let currentDay = Math.floor(now.getTime() / (1000*60*60*24))
+      let currentUserStats = await HRapi.getUserStats(player.gameID)
+
+      // remove some unnecasery shit
+      currentUserStats.weaponsDealt = undefined
+      currentUserStats.weaponsReceived = undefined
+      currentUserStats.createdAt = undefined
+      currentUserStats.recordedAt = new Date()
+      
+      gameStats[currentDay] = currentUserStats
+      database.updatePlayer(playerID, 'gameStats', gameStats)
+    }
+  }
+}

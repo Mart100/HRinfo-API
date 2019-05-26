@@ -89,11 +89,13 @@ module.exports = {
   newPlayer(id, username) {
     let obj = {
       id: id,
-      clan: "none",
+      clan: 'none',
       division: 'jungle',
       points: 0,
       token: utils.randomToken(),
-      username: username
+      username: username,
+      gameID: 'none',
+      gameStats: {}
     }
 
     db.collection('players').doc(id).set(obj)
@@ -142,4 +144,18 @@ module.exports = {
   deleteClan(id) {
     db.collection('clans').doc(id).delete()
   },
+  getTimers() {
+    return new Promise((resolve, reject) => {
+      db.collection("other").doc('timers').get().then((snapshot) => {
+        let data = snapshot.data()
+        resolve(data)
+      })
+    })
+  },
+  updateTimers(what, to) {
+    let obj = {}
+    obj[what] = to
+    db.collection('other').doc('timers').update(obj)
+  }
+
 }
