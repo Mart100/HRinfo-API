@@ -88,7 +88,7 @@ app.post('/updateplayer', async (req, res, next) => {
   }
 
   let oldPlayers = await database.getPlayers()
-  let oldPlayer = players[id]
+  let oldPlayer = oldPlayers[id]
 
   database.updatePlayer(id, what, to)
 
