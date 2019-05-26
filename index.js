@@ -1,6 +1,6 @@
 let express = require('express')
 const database = require('./database.js')
-const database = require('./HRapi.js')
+const HRapi = require('./HRapi.js')
 const bodyParser = require('body-parser')
 const cors =  require('cors')
 let APItoken = 'aB9gHcoyQkVdCAPnr7xCtl52JXY5rpPY'
