@@ -87,6 +87,9 @@ app.post('/updateplayer', async (req, res, next) => {
 
   }
 
+  let oldPlayers = await database.getPlayers()
+  let oldPlayer = players[id]
+
   database.updatePlayer(id, what, to)
 
   // if change points
@@ -142,7 +145,19 @@ app.post('/updateplayer', async (req, res, next) => {
       }
 
       // join clan
-      else clanMembers.push(id)
+      else {
+
+        // remove from old clan
+        if(oldPlayer.clan != 'none') {
+          let oldClan = clans[oldPlayer.clan]
+          let index = oldClan.members.indexOf(id)
+          if(index !== -1) oldClan.members.splice(index, 1)
+          database.updateClan(oldClan.id, 'members', oldClan.members)
+        }
+
+        // add new member
+        clanMembers.push(id)
+      }
 
       // update
       database.updateClan(playerClan.id, 'members', clanMembers)
