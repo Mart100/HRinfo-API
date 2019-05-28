@@ -72,6 +72,23 @@ module.exports = {
       })
     })
   },
+  getPlayerGameStats(id) {
+    return new Promise((resolve, reject) => {
+      db.collection("players").doc(id).collection('gameStats').get().then((querySnapshot) => {
+        let gameStats = {}
+        querySnapshot.forEach((doc) => {
+          let data = doc.data() 
+          gameStats[data.recordedAt] = data
+        })
+        resolve(gameStats)
+      })
+    })
+  },
+  addPlayerGameStats(id, stats) {
+    console.log(id, stats)
+    console.log(stats.recordedAt)
+    db.collection('players').doc(id).collection('gameStats').doc(stats.recordedAt.toString()).set(stats)
+  },
   getPlayerToken(id) {
     return new Promise(async (resolve, reject) => {
       let players = await this.getPlayers()

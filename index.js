@@ -198,31 +198,33 @@ app.listen(process.env.PORT || port, () => {
 })
 
 async function updateGameStats(players) {
-  return
   let timers = await database.getTimers()
   let gameStatTimer = timers.gameStatUpdate.toDate()
   let now = new Date()
 
-  if(now.getTime()-gameStatTimer > 1000*60*60*24) {
+  if(now.getTime()-gameStatTimer.getTime() > 1000*60*60*24) {
     database.updateTimers('gameStatUpdate', now)
+    console.log('RECORDING STATISTICS!!!')
 
     let players = await database.getPlayers()
 
     for(let playerID in players) {
       let player = players[playerID]
       if(player.gameID == 'none' || player.gameID == undefined) continue
-      let gameStats = player.gameStats
       let currentDay = Math.floor(now.getTime() / (1000*60*60*24))
       let currentUserStats = await HRapi.getUserStats(player.gameID)
 
       // remove some unnecasery shit
-      currentUserStats.weaponsDealt = undefined
-      currentUserStats.weaponsReceived = undefined
-      currentUserStats.createdAt = undefined
-      currentUserStats.recordedAt = new Date()
+      delete currentUserStats.weaponsDealt
+      delete currentUserStats.weaponsReceived
+      delete currentUserStats.createdAt
+      delete currentUserStats.name
+      delete currentUserStats.userId
+      delete currentUserStats.__v
+      delete currentUserStats._id
+      currentUserStats.recordedAt = currentDay
       
-      gameStats[currentDay] = currentUserStats
-      database.updatePlayer(playerID, 'gameStats', gameStats)
+      database.addPlayerGameStats(playerID, currentUserStats)
     }
   }
 }
