@@ -160,6 +160,7 @@ module.exports = {
   },
   deleteClan(id) {
     db.collection('clans').doc(id).delete()
+    delete clanList[id]
   },
   getTimers() {
     return new Promise((resolve, reject) => {
