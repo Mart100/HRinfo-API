@@ -7,5 +7,6 @@ module.exports = {
       token += chars[Math.floor(Math.random()*chars.length)]
     }
     return token
-  }
+  },
+  sleep(ms) { return new Promise((resolve, reject) => { setTimeout(() => { resolve() }, ms) }) }
 }

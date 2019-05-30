@@ -3,6 +3,7 @@ let db
 let clanList = {}
 let weaponList = {}
 let playerList = {}
+let HRaccountList = {}
 let divisionList = {}
 
 const utils = require('./utils.js')
@@ -109,13 +110,39 @@ module.exports = {
       points: 0,
       token: utils.randomToken(),
       username: username,
-      gameID: 'none',
-      gameStats: {}
+      gameID: 'none'
     }
 
     db.collection('players').doc(id).set(obj)
     playerList[id] = obj
     return 'SUCCESS'
+  },
+  newHRaccount(gameID) {
+    let obj = {
+      gameID: gameID
+    }
+    db.collection('HRaccounts').doc(gameID).set(obj)
+    HRaccountList[gameID] = obj
+    return 'SUCCESS'
+  },
+  addHRaccountGameStats(gameID, stats) {
+    db.collection('HRaccounts').doc(gameID).collection('gameStats').doc(stats.recordedAt.toString()).set(stats)
+  },
+  getHRaccounts() {
+    return new Promise((resolve, reject) => {
+      if(Object.keys(HRaccountList).length > 0) return resolve(HRaccountList)
+
+      db.collection("HRaccounts").get().then((querySnapshot) => {
+        let list = {}
+        querySnapshot.forEach((doc) => {
+          let data = doc.data() 
+          list[data.gameID] = data
+        })
+        console.log('DATABASE GET HR ACCOUNTS')
+        HRaccountList = list
+        resolve(list)
+      })
+    })
   },
   getClans() {
     return new Promise((resolve, reject) => {

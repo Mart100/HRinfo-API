@@ -1,6 +1,7 @@
 let express = require('express')
 const database = require('./database.js')
 const HRapi = require('./HRapi.js')
+const utils = require('./utils.js')
 const bodyParser = require('body-parser')
 const cors =  require('cors')
 let APItoken = 'aB9gHcoyQkVdCAPnr7xCtl52JXY5rpPY'
@@ -207,19 +208,28 @@ app.listen(process.env.PORT || port, () => {
 
 async function updateGameStats(players) {
   let timers = await database.getTimers()
-  let gameStatTimer = timers.gameStatUpdate.toDate()
+  let gameStatTimer = timers.gameStatUpdate
   let now = new Date()
+  let currentDay = Math.floor(now.getTime() / (1000*60*60*24))
 
-  if(now.getTime()-gameStatTimer.getTime() > 1000*60*60*24) {
-    database.updateTimers('gameStatUpdate', now)
+  if(currentDay > gameStatTimer) {
+    database.updateTimers('gameStatUpdate', currentDay)
     console.log('RECORDING STATISTICS!!!')
 
     let players = await database.getPlayers()
+    let ldrboard = await HRapi.getLeaderboard('daily', 'mostKills')
+    let HRaccounts = await database.getHRaccounts()
 
+    // add leaderboard people
+    for(let plyr of ldrboard) addAnonAcc(plyr.userId, HRaccounts)
+
+    // wait a while
+    await utils.sleep(5000)
+
+    // update players
     for(let playerID in players) {
       let player = players[playerID]
       if(player.gameID == 'none' || player.gameID == undefined) continue
-      let currentDay = Math.floor(now.getTime() / (1000*60*60*24))
       let currentUserStats = await HRapi.getUserStats(player.gameID)
 
       // remove some unnecasery shit
@@ -234,5 +244,32 @@ async function updateGameStats(players) {
       
       database.addPlayerGameStats(playerID, currentUserStats)
     }
+
+    // update HRaccounts
+    for(let HRaccGameID in HRaccounts) {
+      let HRacc = HRaccounts[HRaccGameID]
+      if(HRacc.gameID == 'none' || HRacc.gameID == undefined) continue
+      let currentUserStats = await HRapi.getUserStats(HRacc.gameID)
+
+      // remove some unnecasery shit
+      delete currentUserStats.weaponsDealt
+      delete currentUserStats.weaponsReceived
+      delete currentUserStats.createdAt
+      delete currentUserStats.name
+      delete currentUserStats.userId
+      delete currentUserStats.__v
+      delete currentUserStats._id
+      currentUserStats.recordedAt = currentDay
+      
+      database.addHRaccountGameStats(HRacc.gameID, currentUserStats)
+    }
   }
+}
+
+function addAnonAcc(gameID, HRaccounts) {
+
+  let alreadyExist = HRaccounts[gameID] != undefined
+  if(alreadyExist) return
+
+  database.newHRaccount(gameID)
 }
