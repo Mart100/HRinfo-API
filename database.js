@@ -85,8 +85,6 @@ module.exports = {
     })
   },
   addPlayerGameStats(id, stats) {
-    console.log(id, stats)
-    console.log(stats.recordedAt)
     db.collection('players').doc(id).collection('gameStats').doc(stats.recordedAt.toString()).set(stats)
   },
   getPlayerToken(id) {

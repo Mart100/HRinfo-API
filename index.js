@@ -178,6 +178,14 @@ app.post('/newplayer', async (req, res, next) => {
   res.send('SUCCESS')
 })
 
+app.get('/playerstats', async (req, res, next) => {
+
+  let id = req.query.id
+  let stats = await database.getPlayerGameStats(id)
+
+  res.send(stats)
+})
+
 
 /*=====================*/
 /*========OTHER========*/
