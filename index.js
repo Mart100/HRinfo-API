@@ -166,6 +166,15 @@ app.post('/updateplayer', async (req, res, next) => {
     }
   }
 
+  // if change gameID
+  if(what == 'gameID') {
+    let HRaccounts = await database.getHRaccounts()
+    let HRaccount = HRaccounts[to]
+    if(HRaccount != undefined) {
+      let stats = await database.getHRaccountGameStats(to)
+      for(let stat of Object.values(stats)) database.addPlayerGameStats(id, stat)
+    }
+  }
   res.send('SUCCESS')
 })
 

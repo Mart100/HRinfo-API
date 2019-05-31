@@ -128,6 +128,18 @@ module.exports = {
   addHRaccountGameStats(gameID, stats) {
     db.collection('HRaccounts').doc(gameID).collection('gameStats').doc(stats.recordedAt.toString()).set(stats)
   },
+  getHRaccountGameStats(id) {
+    return new Promise((resolve, reject) => {
+      db.collection("HRaccounts").doc(id).collection('gameStats').get().then((querySnapshot) => {
+        let stats = {}
+        querySnapshot.forEach((doc) => {
+          let data = doc.data() 
+          stats[data.recordedAt] = data
+        })
+        resolve(stats)
+      })
+    })
+  },
   getHRaccounts() {
     return new Promise((resolve, reject) => {
       if(Object.keys(HRaccountList).length > 0) return resolve(HRaccountList)
