@@ -224,7 +224,7 @@ async function updateGameStats(players) {
     console.log('RECORDING STATISTICS!!!')
 
     let players = await database.getPlayers()
-    let ldrboard = await HRapi.getLeaderboard('daily', 'mostKills')
+    let ldrboard = await HRapi.getLeaderboard('daily', 'totalKills')
     let HRaccounts = await database.getHRaccounts()
 
     // add leaderboard people
