@@ -4,6 +4,7 @@ let clanList = {}
 let weaponList = {}
 let playerList = {}
 let HRaccountList = {}
+let timerList = {}
 let divisionList = {}
 
 const utils = require('./utils.js')
@@ -199,10 +200,17 @@ module.exports = {
     db.collection('clans').doc(id).delete()
     delete clanList[id]
   },
+  addPlayingCount(time, to) {
+    console.log(time, to)
+    db.collection('playingCount').doc(time).set(to)
+  },
   getTimers() {
     return new Promise((resolve, reject) => {
+      if(Object.keys(timerList).length > 0) return resolve(timerList)
+
       db.collection("other").doc('timers').get().then((snapshot) => {
         let data = snapshot.data()
+        timerList = data
         resolve(data)
       })
     })
@@ -211,6 +219,7 @@ module.exports = {
     let obj = {}
     obj[what] = to
     db.collection('other').doc('timers').update(obj)
+    timerList[what] = to
   }
 
 }

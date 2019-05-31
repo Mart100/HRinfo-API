@@ -53,8 +53,6 @@ app.post('/deleteclan', async (req, res, next) => {
 app.get('/players', async (req, res, next) => {
   let players = await database.getPlayers()
 
-  updateGameStats()
-
   // filter out token
   for(let id in players) delete players[id].token
   res.send(players)
@@ -275,6 +273,19 @@ async function updateGameStats(players) {
   }
 }
 
+async function updatePlayingCount() {
+  let timers = await database.getTimers()
+  let currentTime = Math.floor(Date.now() / (1000*60*10))
+
+  console.log(currentTime, timers.playingCount)
+
+  if(currentTime > timers.playingCount) {
+    database.updateTimers('playingCount', currentTime)
+    let playingCount = await HRapi.getPlayingCount()
+    database.addPlayingCount(currentTime.toString(), playingCount)
+  }
+}
+
 function addAnonAcc(gameID, HRaccounts) {
 
   let alreadyExist = HRaccounts[gameID] != undefined
@@ -282,3 +293,19 @@ function addAnonAcc(gameID, HRaccounts) {
 
   database.newHRaccount(gameID)
 }
+
+/*============================*/
+/*============LOOP============*/
+/*============================*/
+setInterval(updateTick, 1000*60)
+
+function updateTick() {
+  updateGameStats()
+  updatePlayingCount()
+}
+
+app.get('/updatetick', async (req, res, next) => {
+  if(req.query.token != APItoken) return res.send('ACCESS DENIED: INVALID TOKEN')
+  updateTick()
+  res.send('SUCCESS')
+})
