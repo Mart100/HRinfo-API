@@ -172,7 +172,6 @@ app.post('/updateplayer', async (req, res, next) => {
     let HRaccount = HRaccounts[to]
     if(HRaccount != undefined) {
       let stats = await database.getHRaccountGameStats(to)
-      console.log(stats)
       for(let stat of Object.values(stats)) database.addPlayerGameStats(id, stat)
     }
   }
