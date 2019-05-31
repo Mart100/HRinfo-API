@@ -202,7 +202,7 @@ module.exports = {
     delete clanList[id]
   },
   async addPlayingCount(time, to) {
-    if(Object.keys(playingCountList).length > 0) await getPlayingCount()
+    if(Object.keys(playingCountList).length > 0) await this.getPlayingCount()
     db.collection('playingCount').doc(time).set(to)
     playingCountList[time] = to
   },
