@@ -276,15 +276,18 @@ async function updateGameStats(players) {
 async function updatePlayingCount() {
   let timers = await database.getTimers()
   let currentTime = Math.floor(Date.now() / (1000*60*10))
-
-  console.log(currentTime, timers.playingCount)
-
   if(currentTime > timers.playingCount) {
     database.updateTimers('playingCount', currentTime)
     let playingCount = await HRapi.getPlayingCount()
+    playingCount.recordedAt = currentTime
     database.addPlayingCount(currentTime.toString(), playingCount)
   }
 }
+
+app.get('/playingcount', async (req, res, next) => {
+  let playingCount = await database.getPlayingCount()
+  res.send(playingCount)
+})
 
 function addAnonAcc(gameID, HRaccounts) {
 

@@ -4,6 +4,7 @@ let clanList = {}
 let weaponList = {}
 let playerList = {}
 let HRaccountList = {}
+let playingCountList = {}
 let timerList = {}
 let divisionList = {}
 
@@ -200,9 +201,25 @@ module.exports = {
     db.collection('clans').doc(id).delete()
     delete clanList[id]
   },
-  addPlayingCount(time, to) {
-    console.log(time, to)
+  async addPlayingCount(time, to) {
+    if(Object.keys(playingCountList).length > 0) await getPlayingCount()
     db.collection('playingCount').doc(time).set(to)
+    playingCountList[time] = to
+  },
+  getPlayingCount() {
+    return new Promise((resolve, reject) => {
+      if(Object.keys(playingCountList).length > 0) return resolve(playingCountList)
+
+      db.collection("playingCount").get().then((querySnapshot) => {
+        let playingCount = {}
+        querySnapshot.forEach((doc) => {
+          let data = doc.data() 
+          playingCount[data.recordedAt] = data
+        })
+        playingCountList = playingCount
+        resolve(playingCount)
+      })
+    })
   },
   getTimers() {
     return new Promise((resolve, reject) => {
