@@ -256,11 +256,11 @@ module.exports = {
       })
     })
   },
-  newTournament() {
+  newTournament(name) {
     let id = utils.randomToken()
     let obj = {
       id: id,
-      name: '',
+      name: name,
       desc: '',
       host: '',
       players: [],
@@ -276,6 +276,7 @@ module.exports = {
   updateTournament(id, what, to) {
     let obj = {}
     obj[what] = to
+    console.log(obj)
     db.collection('tournaments').doc(id).update(obj)
     if(tournamentList[id] != undefined) tournamentList[id][what] = to
     return 'SUCCESS'

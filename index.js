@@ -2,6 +2,7 @@ let express = require('express')
 const database = require('./database.js')
 const HRapi = require('./HRapi.js')
 const utils = require('./utils.js')
+const challonge = require('./challonge.js')
 const bodyParser = require('body-parser')
 const cors =  require('cors')
 let APItoken = 'aB9gHcoyQkVdCAPnr7xCtl52JXY5rpPY'
@@ -307,10 +308,11 @@ app.get('/tournaments', async (req, res, next) => {
 
 app.get('/newtournament', async (req, res, next) => {
   let token = req.query.token
+  let name = req.query.name
   if(token != APItoken) return res.send('ACCESS DENIED: INVALID TOKEN')
 
-
-  database.newTournament()
+  await challonge.newTournament(name)
+  database.newTournament(name)
   res.send('SUCCESS')
 })
 
@@ -344,6 +346,20 @@ app.get('/jointournament', async (req, res, next) => {
   database.updateTournament(tournament.id, 'players', tournament.players)
 
   return res.send('SUCCESS')
+})
+
+app.get('/starttournament', async (req, res, next) => {
+  let token = req.query.token
+  if(token != APItoken) return res.send('ACCESS DENIED: INVALID TOKEN')
+
+  let tournamentID = req.query.id
+  let tournaments = await database.getTournaments()
+  let tournament = Object.values(tournaments).find(t => t.id == tournamentID)
+
+  database.updateTournament(tournament.id, 'status', 'ongoing')
+
+
+
 })
 
 /*============================*/
