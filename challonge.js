@@ -5,7 +5,7 @@ const fetch = require('node-fetch')
 module.exports = {
   createTournament(name) {
     return new Promise((resolve, reject) => {
-      let url = new URL('https://api.challonge.com/v1/tournaments')
+      let url = new URL('https://api.challonge.com/v1/tournaments.json')
       let params = {
         "api_key": apiKEY,
         "tournament[name]": name,
