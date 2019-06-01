@@ -52,6 +52,7 @@ app.post('/deleteclan', async (req, res, next) => {
 
 app.get('/players', async (req, res, next) => {
   let players = await database.getPlayers()
+  players = JSON.parse(JSON.stringify(players))
 
   // filter out token
   for(let id in players) delete players[id].token
@@ -74,7 +75,6 @@ app.post('/updateplayer', async (req, res, next) => {
   // token access handling
   if(token != APItoken) {
     let playerToken = await database.getPlayerToken(id)
-    console.log(playerToken, token, id)
     if(playerToken == token) {
       if(what == 'points') return res.send('ACCESS DENIED: CANT CHANGE POINTS WITH USER TOKEN')
       if(what == 'id') return res.send('ACCESS DENIED: CANT CHANGE ID WITH USER TOKEN')
