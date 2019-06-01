@@ -1,5 +1,6 @@
 let apiKEY = 'HHxb5sEy8p13dX0jzjJujYLHQfi6QG1QJEA3YnKJ'
 const { URL, URLSearchParams } = require('url')
+const fetch = require('node-fetch')
 
 module.exports = {
   createTournament(name) {
