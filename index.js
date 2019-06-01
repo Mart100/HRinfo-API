@@ -325,6 +325,28 @@ app.get('/updatetournament', async (req, res, next) => {
   res.send('SUCCESS')
 })
 
+app.get('/jointournament', async (req, res, next) => {
+  let token = req.query.token
+  let tournamentID = req.query.id
+  let players = await database.getPlayers()
+  let tournaments = await database.getTournaments()
+
+  let player = Object.values(players).find((p) => p.token == token)
+  let tournament = Object.values(tournaments).find(t => t.id == tournamentID)
+
+  // check if able to join
+  if(player == undefined) return res.send('PLAYER UNDEFINED')
+  if(tournament == undefined) return res.send('TOURNAMENT UNDEFINED')
+  if(tournament.players.includes(player.id)) return res.send('PLAYER ALREADY IN TOURNAMENT')
+  if(tournament.status != 'open') return res.send('TOURNAMENT NOT OPEN')
+
+  tournament.players.push(player.id)
+
+
+  database.updateTournament(tournament.id, tournament.players)
+
+  return res.send('SUCCESS')
+})
 
 /*============================*/
 /*============LOOP============*/
