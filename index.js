@@ -58,9 +58,9 @@ app.get('/players', async (req, res, next) => {
   res.send(players)
 })
 
-app.post('/playertoken', async (req, res, next) => {
-  if(req.body.token != APItoken) return res.send('ACCESS DENIED: INVALID TOKEN')
-  let id = req.body.id
+app.get('/playertoken', async (req, res, next) => {
+  if(req.query.token != APItoken) return res.send('ACCESS DENIED: INVALID TOKEN')
+  let id = req.query.id
   let playertoken = await database.getPlayerToken(id)
   res.send(playertoken)
 })

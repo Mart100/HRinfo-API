@@ -95,7 +95,9 @@ module.exports = {
     return new Promise(async (resolve, reject) => {
       let players = await this.getPlayers()
       let player = players[id]
-      resolve(player.token)
+      let token = player.token
+      console.log(Object.keys(players).length, player.id, token)
+      resolve(token)
     })
   },
   updatePlayer(id, what, to) {
