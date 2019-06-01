@@ -312,7 +312,7 @@ app.get('/newtournament', async (req, res, next) => {
   if(token != APItoken) return res.send({ error: 'ACCESS DENIED: INVALID TOKEN' })
 
   let challongeResponse = await challonge.createTournament(name)
-  if(challongeResponse.errors != undefined) return res.send(challongeResponse)
+  if(challongeResponse.errors != undefined) return res.send(challongeResponse.errors)
   database.newTournament(name)
   res.send({ response: 'SUCCESS'})
 })
