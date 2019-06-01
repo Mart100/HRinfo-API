@@ -341,7 +341,7 @@ app.get('/jointournament', async (req, res, next) => {
 
   tournament.players.push(player.id)
 
-
+  console.log(tournament.id, tournament.players)
   database.updateTournament(tournament.id, tournament.players)
 
   return res.send('SUCCESS')
