@@ -96,6 +96,7 @@ module.exports = {
       let players = await this.getPlayers()
       let player = players[id]
       let token = player.token
+      console.log(Object.keys(players).length, player.id, token)
       resolve(token)
     })
   },
