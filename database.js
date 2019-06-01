@@ -4,6 +4,7 @@ let clanList = {}
 let weaponList = {}
 let playerList = {}
 let HRaccountList = {}
+let tournamentList = {}
 let playingCountList = {}
 let timerList = {}
 let divisionList = {}
@@ -237,6 +238,46 @@ module.exports = {
     obj[what] = to
     db.collection('other').doc('timers').update(obj)
     timerList[what] = to
+  },
+  getTournaments() {
+    return new Promise((resolve, reject) => {
+      if(Object.keys(tournamentList).length > 0) return resolve(tournamentList)
+
+      db.collection("tournaments").get().then((querySnapshot) => {
+        let tournaments = {}
+        querySnapshot.forEach((doc) => {
+          let data = doc.data() 
+          tournaments[data.id] = data
+        })
+        console.log('DATABASE GET TOURNAMENTS')
+        tournamentList = tournaments
+        resolve(tournaments)
+      })
+    })
+  },
+  newTournament() {
+    let id = utils.randomToken()
+    let obj = {
+      id: id,
+      name: '',
+      desc: '',
+      host: '',
+      players: [],
+      region: '',
+      status: '',
+      createdOn: new Date()
+    }
+
+    db.collection('tournaments').doc(id).set(obj)
+    tournamentList[id] = obj
+    return 'SUCCESS'
+  },
+  updateTournament(id, what, to) {
+    let obj = {}
+    obj[what] = to
+    db.collection('tournaments').doc(id).update(obj)
+    if(tournamentList[id] != undefined) tournamentList[id][what] = to
+    return 'SUCCESS'
   }
 
 }

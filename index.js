@@ -297,6 +297,35 @@ function addAnonAcc(gameID, HRaccounts) {
   database.newHRaccount(gameID)
 }
 
+
+/*===================================*/
+/*============TOURNAMENTS============*/
+/*===================================*/
+app.get('/tournaments', async (req, res, next) => {
+  let tournaments = await database.getTournaments()
+  res.send(tournaments)
+})
+
+app.get('/newtournament', async (req, res, next) => {
+  let token = req.query.token
+  if(token != APItoken) return res.send('ACCESS DENIED: INVALID TOKEN')
+
+
+  database.newTournament()
+  res.send('SUCCESS')
+})
+
+app.get('/updatetournament', async (req, res, next) => {
+  let token = req.query.token
+  if(token != APItoken) return res.send('ACCESS DENIED: INVALID TOKEN')
+  let id = req.query.id
+  let what = req.query.what
+  let to = req.query.to
+  database.updateTournament(id, what, to)
+  res.send('SUCCESS')
+})
+
+
 /*============================*/
 /*============LOOP============*/
 /*============================*/
