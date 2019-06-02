@@ -342,6 +342,10 @@ app.get('/jointournament', async (req, res, next) => {
   if(tournament.players.includes(player.id)) return res.send('PLAYER ALREADY IN TOURNAMENT')
   if(tournament.status != 'open') return res.send('TOURNAMENT NOT OPEN')
 
+  // add to challonge
+  challonge.addPlayer(tournament.id, player.username)
+
+  // add to firebase
   tournament.players.push(player.id)
 
   database.updateTournament(tournament.id, 'players', tournament.players)
@@ -358,6 +362,8 @@ app.get('/starttournament', async (req, res, next) => {
   let tournament = Object.values(tournaments).find(t => t.id == tournamentID)
 
   database.updateTournament(tournament.id, 'status', 'ongoing')
+
+  challonge.startTournament()
 
 
 
