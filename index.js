@@ -343,7 +343,7 @@ app.get('/jointournament', async (req, res, next) => {
   if(tournament.status != 'open') return res.send('TOURNAMENT NOT OPEN')
 
   // add to challonge
-  let challongeResponse = challonge.addPlayer(tournament.name, player.username)
+  let challongeResponse = await challonge.addPlayer(tournament.name, player.username)
   console.log(challongeResponse)
 
   // add to firebase
