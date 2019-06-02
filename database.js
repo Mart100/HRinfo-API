@@ -262,10 +262,10 @@ module.exports = {
       id: id,
       name: name,
       desc: '',
+      players: {},
       host: '',
-      players: [],
       region: '',
-      status: '',
+      status: 'open',
       createdOn: new Date()
     }
 

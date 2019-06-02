@@ -339,20 +339,21 @@ app.get('/jointournament', async (req, res, next) => {
   // check if able to join
   if(player == undefined) return res.send('PLAYER UNDEFINED')
   if(tournament == undefined) return res.send('TOURNAMENT UNDEFINED')
-  if(tournament.players.includes(player.id)) return res.send('PLAYER ALREADY IN TOURNAMENT')
+  if(tournament.players[player.id]) return res.send('PLAYER ALREADY IN TOURNAMENT')
   if(tournament.status != 'open') return res.send('TOURNAMENT NOT OPEN')
 
   // add to challonge
   let challongeResponse = await challonge.addPlayer(tournament.name, player.username)
-  console.log(challongeResponse)
+  if(challongeResponse.errors != undefined) return res.send(challongeResponse.errors.toString())
 
   // add to firebase
-  tournament.players.push(player.id)
+  tournament.players[player.id] = challongeResponse.participant.id
 
   database.updateTournament(tournament.id, 'players', tournament.players)
 
   return res.send('SUCCESS')
 })
+
 
 app.get('/emptytournament', async (req, res, next) => {
   if(req.query.token != APItoken) return res.send('ACCESS DENIED: INVALID TOKEN')
@@ -375,10 +376,8 @@ app.get('/starttournament', async (req, res, next) => {
 
   database.updateTournament(tournament.id, 'status', 'ongoing')
 
-  challonge.startTournament()
-
-
-
+  challonge.startTournament(tournament.name)
+  res.send('Started!')
 })
 
 /*============================*/
