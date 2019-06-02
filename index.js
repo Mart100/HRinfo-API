@@ -343,13 +343,25 @@ app.get('/jointournament', async (req, res, next) => {
   if(tournament.status != 'open') return res.send('TOURNAMENT NOT OPEN')
 
   // add to challonge
-  challonge.addPlayer(tournament.id, player.username)
+  let challongeResponse = challonge.addPlayer(tournament.name, player.username)
+  console.log(challongeResponse)
 
   // add to firebase
   tournament.players.push(player.id)
 
   database.updateTournament(tournament.id, 'players', tournament.players)
 
+  return res.send('SUCCESS')
+})
+
+app.get('/emptytournament', async (req, res, next) => {
+  if(req.query.token != APItoken) return res.send('ACCESS DENIED: INVALID TOKEN')
+  let tournamentID = req.query.id
+  let tournaments = await database.getTournaments()
+  let tournament = Object.values(tournaments).find(t => t.id == tournamentID)
+  if(tournament == undefined) return res.send('TOURNAMENT UNDEFINED')
+  tournament.players = []
+  database.updateTournament(tournament.id, 'players', tournament.players)
   return res.send('SUCCESS')
 })
 

@@ -276,7 +276,6 @@ module.exports = {
   updateTournament(id, what, to) {
     let obj = {}
     obj[what] = to
-    console.log(obj)
     db.collection('tournaments').doc(id).update(obj)
     if(tournamentList[id] != undefined) tournamentList[id][what] = to
     return 'SUCCESS'
