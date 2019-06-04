@@ -194,25 +194,6 @@ app.get('/playerstats', async (req, res, next) => {
   res.send(stats)
 })
 
-
-/*=====================*/
-/*========OTHER========*/
-/*=====================*/
-
-app.get('/weapons', async (req, res, next) => {
-  let weapons = await database.getWeapons()
-  res.send(weapons)
-})
-
-app.get('/divisions', async (req, res, next) => {
-  let divisions = await database.getDivisions()
-  res.send(divisions)
-})
-
-app.listen(process.env.PORT || port, () => {
-  console.log('Server listening on port ', process.env.PORT || port)
-})
-
 async function updateGameStats(players) {
   let timers = await database.getTimers()
   let gameStatTimer = timers.gameStatUpdate
@@ -369,6 +350,22 @@ app.get('/starttournament', async (req, res, next) => {
   res.send('Started!')
 })
 
+/*======================*/
+/*========TIMERS========*/
+/*======================*/
+app.get('/timers', async (req, res, next) => {
+  let timers = await database.getTimers()
+  res.send(timers)
+})
+
+app.get('/updatetimers', async (req, res, next) => {
+  if(req.query.token != APItoken) return res.send('ACCESS DENIED: INVALID TOKEN')
+  req.query.to = Number(req.query.to)
+  database.updateTimers(req.query.what, req.query.to)
+  res.send('SUCCESS')
+})
+
+
 /*============================*/
 /*============LOOP============*/
 /*============================*/
@@ -392,4 +389,22 @@ app.get('/updatetick', async (req, res, next) => {
 app.get('/addguild', async (req, res, next) => {
   let token = req.query.token
   if(req.query.token != APItoken) return res.send('ACCESS DENIED: INVALID TOKEN')
+})
+
+/*=====================*/
+/*========OTHER========*/
+/*=====================*/
+
+app.get('/weapons', async (req, res, next) => {
+  let weapons = await database.getWeapons()
+  res.send(weapons)
+})
+
+app.get('/divisions', async (req, res, next) => {
+  let divisions = await database.getDivisions()
+  res.send(divisions)
+})
+
+app.listen(process.env.PORT || port, () => {
+  console.log('Server listening on port ', process.env.PORT || port)
 })
