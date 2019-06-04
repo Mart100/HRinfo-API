@@ -263,6 +263,7 @@ module.exports = {
       name: name,
       players: {},
       host: '',
+      roundMaxTime: 7,
       region: '',
       status: 'open',
       createdOn: Date.now()
