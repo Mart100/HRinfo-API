@@ -261,12 +261,11 @@ module.exports = {
     let obj = {
       id: id,
       name: name,
-      desc: '',
       players: {},
       host: '',
       region: '',
       status: 'open',
-      createdOn: new Date()
+      createdOn: Date.now()
     }
 
     db.collection('tournaments').doc(id).set(obj)

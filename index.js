@@ -354,18 +354,6 @@ app.get('/jointournament', async (req, res, next) => {
   return res.send('SUCCESS')
 })
 
-
-app.get('/emptytournament', async (req, res, next) => {
-  if(req.query.token != APItoken) return res.send('ACCESS DENIED: INVALID TOKEN')
-  let tournamentID = req.query.id
-  let tournaments = await database.getTournaments()
-  let tournament = Object.values(tournaments).find(t => t.id == tournamentID)
-  if(tournament == undefined) return res.send('TOURNAMENT UNDEFINED')
-  tournament.players = []
-  database.updateTournament(tournament.id, 'players', tournament.players)
-  return res.send('SUCCESS')
-})
-
 app.get('/starttournament', async (req, res, next) => {
   let token = req.query.token
   if(token != APItoken) return res.send('ACCESS DENIED: INVALID TOKEN')
@@ -375,6 +363,7 @@ app.get('/starttournament', async (req, res, next) => {
   let tournament = Object.values(tournaments).find(t => t.id == tournamentID)
 
   database.updateTournament(tournament.id, 'status', 'ongoing')
+  database.updateTournament(tournament.id, 'startDate', Date.now())
 
   challonge.startTournament(tournament.name)
   res.send('Started!')
@@ -394,4 +383,13 @@ app.get('/updatetick', async (req, res, next) => {
   if(req.query.token != APItoken) return res.send('ACCESS DENIED: INVALID TOKEN')
   updateTick()
   res.send('SUCCESS')
+})
+
+
+/*======================*/
+/*========GUILDS========*/
+/*======================*/
+app.get('/addguild', async (req, res, next) => {
+  let token = req.query.token
+  if(req.query.token != APItoken) return res.send('ACCESS DENIED: INVALID TOKEN')
 })
