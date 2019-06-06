@@ -262,6 +262,7 @@ module.exports = {
       id: id,
       name: name,
       players: {},
+      description: '',
       host: '',
       roundMaxTime: 7,
       region: '',

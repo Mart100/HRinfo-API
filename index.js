@@ -304,6 +304,7 @@ app.get('/updatetournament', async (req, res, next) => {
   let id = req.query.id
   let what = req.query.what
   let to = req.query.to
+  if(to[0] == '{' && to[to.length-1] == '}') to = JSON.parse(to)
   database.updateTournament(id, what, to)
   res.send('SUCCESS')
 })
@@ -328,7 +329,12 @@ app.get('/jointournament', async (req, res, next) => {
   if(challongeResponse.errors != undefined) return res.send(challongeResponse.errors.toString())
 
   // add to firebase
-  tournament.players[player.id] = challongeResponse.participant.id
+  tournament.players[playerID] = {
+    'challongeID': challongeResponse.participant.id,
+    'id': playerID,
+    'extendLimit': 0,
+    'username': playerUsername
+  }
 
   database.updateTournament(tournament.id, 'players', tournament.players)
 
@@ -348,6 +354,44 @@ app.get('/starttournament', async (req, res, next) => {
 
   challonge.startTournament(tournament.name)
   res.send('Started!')
+})
+
+app.get('/leavetournament', async (req, res, next) => {
+  let playerID = req.query.player
+  let playerUsername = req.query.username
+  let tournamentID = req.query.tournament
+  let tournaments = await database.getTournaments()
+
+  let tournament = Object.values(tournaments).find(t => t.id == tournamentID)
+
+  // check if able to join
+  if(tournament == undefined) return res.send('TOURNAMENT UNDEFINED')
+  if(!tournament.players[playerID]) return res.send('PLAYER NOT IN TOURNAMENT')
+  if(tournament.status != 'open') return res.send('TOURNAMENT NOT OPEN')
+
+  // add to challonge
+  let challongeResponse = await challonge.removePlayer(tournament.name, tournament.players[playerID].challongeID)
+  if(challongeResponse.errors != undefined) return res.send(challongeResponse.errors.toString())
+
+  // add to firebase
+  delete tournament.players[playerID]
+
+  database.updateTournament(tournament.id, 'players', tournament.players)
+
+  return res.send('SUCCESS')
+})
+
+app.get('/deletetournament', async (req, res, next) => {
+  if(req.query.token != APItoken) return res.send('ACCESS DENIED: INVALID TOKEN')
+
+  let tournamentID = req.query.tournament
+  let tournaments = await database.getTournaments()
+  let tournament = Object.values(tournaments).find(t => t.id == tournamentID)
+
+  database.deleteTournament(tournamentID)
+  challonge.deleteTournament(tournament.name)
+
+  res.send('SUCCESS')
 })
 
 /*======================*/

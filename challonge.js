@@ -33,5 +33,21 @@ module.exports = {
       url.search = new URLSearchParams(params)
       fetch(url, {method:'POST'}).then(res => res.json()).then(json => resolve(json))
     })
+  },
+  deleteTournament(tournament) {
+    return new Promise((resolve, reject) => {
+      let url = new URL(`https://api.challonge.com/v1/tournaments/${tournament}.json`)
+      let params = { "api_key": apiKEY }
+      url.search = new URLSearchParams(params)
+      fetch(url, {method:'DELETE'}).then(res => res.json()).then(json => resolve(json))
+    })
+  },
+  removePlayer(tournament, playerID) {
+    return new Promise((resolve, reject) => {
+      let url = new URL(`https://api.challonge.com/v1/tournaments/${tournament}/participants/${playerID}.json`)
+      let params = { "api_key": apiKEY }
+      url.search = new URLSearchParams(params)
+      fetch(url, {method:'DELETE'}).then(res => res.json()).then(json => resolve(json))
+    })
   }
 }
