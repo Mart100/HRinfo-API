@@ -25,25 +25,25 @@ module.exports = {
   },
   getPlayingCountEU() {
     return new Promise((resolve, reject) => {
-      fetch('https://eu-match.hrbackend.io:8100/count', { method: 'GET', headers: {Origin: 'https://helmetroyale.io'} })
+      fetch('https://eu-match.hrbackend.com:8100/count', { method: 'GET', headers: {Origin: 'https://helmetroyale.io'} })
         .then(res => res.json()).then(json => resolve(json.count))
     })
   },
   getPlayingCountUS() {
     return new Promise((resolve, reject) => {
-      fetch('https://us-east-match.hrbackend.io:8100/count', { method: 'GET', headers: {Origin: 'https://helmetroyale.io'} })
+      fetch('https://us-east-match.hrbackend.com:8100/count', { method: 'GET', headers: {Origin: 'https://helmetroyale.io'} })
         .then(res => res.json()).then(json => resolve(json.count))
     })
   },
   getPlayingCountSA() {
     return new Promise((resolve, reject) => {
-      fetch('https://sa-east-match.hrbackend.io:8100/count', { method: 'GET', headers: {Origin: 'https://helmetroyale.io'} })
+      fetch('https://sa-east-match.hrbackend.com:8100/count', { method: 'GET', headers: {Origin: 'https://helmetroyale.io'} })
         .then(res => res.json()).then(json => resolve(json.count))
     })
   },
   getPlayingCountASIA() {
     return new Promise((resolve, reject) => {
-      fetch('https://kor-match.hrbackend.io:8100/count', { method: 'GET', headers: {Origin: 'https://helmetroyale.io'} })
+      fetch('https://kor-match.hrbackend.com:8100/count', { method: 'GET', headers: {Origin: 'https://helmetroyale.io'} })
         .then(res => res.json()).then(json => resolve(json.count))
     })
   }
