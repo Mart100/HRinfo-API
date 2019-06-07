@@ -449,6 +449,11 @@ app.get('/divisions', async (req, res, next) => {
   res.send(divisions)
 })
 
+app.get('/hraccounts', async (req, res, next) => {
+  let HRaccounts = await database.getHRaccounts()
+  res.send(HRaccounts)
+})
+
 app.listen(process.env.PORT || port, () => {
   console.log('Server listening on port ', process.env.PORT || port)
 })
