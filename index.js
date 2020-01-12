@@ -10,7 +10,7 @@ let APItoken = 'aB9gHcoyQkVdCAPnr7xCtl52JXY5rpPY'
 database.initialize()
 
 var app = express()
-let port = 3100
+let port = 3040
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
